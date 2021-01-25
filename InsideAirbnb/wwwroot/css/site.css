@@ -4,3 +4,50 @@
     bottom: 0;
     width: 100%;
 }
+
+.marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: red;
+}
+
+.leaflet-popup-content {
+    padding: 0 !important;
+}
+
+.leaflet-popup-content div {
+    padding: 15px;
+}
+
+.leaflet-popup-content div p {
+    margin-bottom: 0;
+}
+
+.leaflet-popup-content div.host {
+    padding: 10px 15px;
+    font-size: 12px;
+}
+
+.leaflet-popup-content div.main p {
+    font-size: 12px;
+}
+
+.leaflet-popup-content div.main p.name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.leaflet-popup-content div.numbers p {
+    font-size: 12px;
+}
+
+.leaflet-popup-content div.numbers p.price, .leaflet-popup-content div.numbers p.rating {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.leaflet-popup-content div.numbers p.rating {
+    margin-top: 10px;
+}

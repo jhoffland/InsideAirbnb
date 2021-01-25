@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace InsideAirbnb.ViewModels
 {
-    public class NeighbourhoodsViewModel
+    public class NeighbourhoodViewModel
     {
         public string Neighbourhood { get; set; }
     }
