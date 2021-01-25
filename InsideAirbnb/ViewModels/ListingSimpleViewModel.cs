@@ -14,6 +14,7 @@ namespace InsideAirbnb.ViewModels
 
         public string Name { get; set; }
         public string? Neighbourhood { get; set; }
+        public string? NeighbourhoodCompact { get; set; }
         public string? City { get; set; }
         public string? RoomType { get; set; }
 

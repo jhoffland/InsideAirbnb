@@ -46,6 +46,7 @@ namespace InsideAirbnb.Controllers
                         HostName = l.HostName,
                         Name = l.Name,
                         Neighbourhood = l.Neighbourhood,
+                        NeighbourhoodCompact = l.NeighbourhoodCleansed,
                         City = l.City,
                         RoomType = l.RoomType,
                         Price = l.Price,
@@ -59,7 +60,12 @@ namespace InsideAirbnb.Controllers
                     }
                 );
 
-            if(ratingMin != null && ratingMin.Length > 0)
+            if (neighbourhood != null && neighbourhood.Length > 0)
+            {
+                listingsQuery = listingsQuery.Where(listing => listing.NeighbourhoodCompact == neighbourhood);
+            }
+
+            if (ratingMin != null && ratingMin.Length > 0)
             {
                 listingsQuery = listingsQuery.Where(listing => listing.Rating >= (int.Parse(ratingMin) * 10));
             }
