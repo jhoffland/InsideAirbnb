@@ -1,0 +1,82 @@
+﻿@model List<InsideAirbnb.ViewModels.NeighbourhoodsViewModel>
+
+@{
+    ViewData["Title"] = "Amsterdam | ";
+}
+
+<div class="row h-100">
+    <div class="col-lg-9 px-0 h-100">
+        <div id="map"></div>
+    </div>
+    <div class="col-lg-3 py-4">
+        <h1 class="h2 mb-4">Amsterdam</h1>
+
+        <div class="accordion" id="accordion-sidebar">
+            <div class="card">
+                <div class="card-header" id="filter-header">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#filter-collapse" aria-expanded="true" aria-controls="filter-collapse">
+                            Filter
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="filter-collapse" class="collapse" aria-labelledby="filter-header" data-parent="#accordion-sidebar">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label class="mb-0">Prijs (&euro;)</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" id="price-min" name="price-min" min="0" step=".01" placeholder="Min" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" id="price-max" name="price-max" min="0" step=".01" placeholder="Max" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="neighbourhood" class="mb-0">Buurt</label>
+                                <select id="neighbourhood" name="neighbourhood" class="form-control">
+                                    <option value="" selected></option>
+                                    @foreach(var neighbourhood in Model)
+                                    {
+                                        <option value="@neighbourhood.Neighbourhood">@neighbourhood.Neighbourhood</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="mb-0">Rating (van 1 tm 10)</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" id="review-scroes-rating-min" name="review-scroes-rating-min" min="1" max="10" step="1" placeholder="Min" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" id="review-scroes-rating-max" name="review-scroes-rating-max" min="1" max="10" step="1" placeholder="Max" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Filteren</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+        @section Scripts {
+            <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+            <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+
+            <script>
+                L.mapbox.accessToken = 'pk.eyJ1Ijoiam9lcGhvZmZsYW5kIiwiYSI6ImNra2Nma3Y5YTA1OTUyd3A3ZGhwaHd0djkifQ.c2nNx-yi8maJxls5Ob3fJA';
+                const map = L.mapbox.map('map')
+                    .setView([40, 0], 2)
+                    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+            </script>
+        }
