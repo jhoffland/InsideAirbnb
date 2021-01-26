@@ -5,12 +5,23 @@
     width: 100%;
 }
 
-.marker {
-    width: 10px;
-    height: 10px;
+.marker-unkown, .marker-high, .marker-low {
+    width: 8px;
+    height: 8px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.marker-unkown {
+    background-color: gray;
+}
+
+.marker-low {
     background-color: red;
+}
+
+.marker-high {
+    background-color: green;
 }
 
 .leaflet-popup-content {
@@ -43,11 +54,11 @@
     font-size: 12px;
 }
 
-.leaflet-popup-content div.numbers p.price, .leaflet-popup-content div.numbers p.rating {
+.leaflet-popup-content div.numbers p.price, .leaflet-popup-content div.numbers p.rating, .leaflet-popup-content div.numbers p.high-low-availability {
     font-size: 15px;
     font-weight: bold;
 }
 
-.leaflet-popup-content div.numbers p.rating {
+.leaflet-popup-content div.numbers p.rating, .leaflet-popup-content div.numbers p.high-low-availability {
     margin-top: 10px;
 }

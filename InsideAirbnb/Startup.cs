@@ -1,4 +1,6 @@
 using InsideAirbnb.Models;
+using InsideAirbnb.Repositories;
+using InsideAirbnb.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +32,8 @@ namespace InsideAirbnb
             services.AddDbContext<AirBNBContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("AirBNB")
             ));
+
+            services.AddScoped<IRepository<ListingSummaryViewModel>, ListingSummaryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

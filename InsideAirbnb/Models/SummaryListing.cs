@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -7,6 +8,7 @@ namespace InsideAirbnb.Models
 {
     public partial class SummaryListing
     {
+        [ForeignKey("Listing")]
         public int Id { get; set; }
         public string Name { get; set; }
         public int HostId { get; set; }
@@ -23,5 +25,7 @@ namespace InsideAirbnb.Models
         public double? ReviewsPerMonth { get; set; }
         public int? CalculatedHostListingsCount { get; set; }
         public int? Availability365 { get; set; }
+        
+        public virtual Listing Listing { get; set; }
     }
 }

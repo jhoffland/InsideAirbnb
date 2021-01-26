@@ -79,11 +79,6 @@
             .setView([52.367912, 4.896645], 12)
             .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
 
-        const marker = L.divIcon({
-            className: 'marker',
-            // iconSize: [60, 60]
-        });
-
         const addMarkers = respData => {
             respData.forEach(listing => {
                 let popup = '';
@@ -110,13 +105,10 @@
                 popup += '<div class="numbers">';
 
                 if (listing.price) {
-                    popup += `<p class="price">${listing.price} /night</p>`;
+                    popup += `<p class="price">&euro; ${listing.price}.00 /night</p>`;
 
                     if (listing.minimumNights) {
                         popup += `<p class="minimum-nights">${listing.minimumNights} night(s) minimum</p>`; 
-                    }
-                    if (listing.maximumNights) {
-                        popup += `<p class="maximum-nights">${listing.maximumNights} night(s) maximum</p>`;
                     }
                 }
 
@@ -132,9 +124,22 @@
                     }
                 }
 
+                const highAvailability = availability365 => availability365 > 70;
+
+                if (listing.availability365) {
+                    const availabilityPerc = listing.availability365 / 365;
+                    popup += `<p class="high-low-availability">${highAvailability(listing.availability365) ? 'HIGH' : 'LOW'} availability</p>`;
+                    popup += `<p class="availability-numbers">${listing.availability365} days/year (${Math.round(availabilityPerc * 100)}%)</p>`;
+                }
+
                 popup += '</div>';
 
-                L.marker([listing.latitude, listing.longitude], { icon: marker })
+                L.marker([listing.latitude, listing.longitude], {
+                    icon: L.divIcon({
+                        className: listing.availability365 ? highAvailability(listing.availability365) ? 'marker-high' : 'marker-low' : 'marker-unkown',
+                        // iconSize: [60, 60]
+                    })
+                })
                     .bindPopup(popup)
                     .addTo(map)
             });
