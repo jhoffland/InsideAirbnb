@@ -9,7 +9,7 @@ namespace InsideAirbnb.Repositories
 {
     public class ListingRepository : IRepository<Listing>
     {
-        public IQueryable<Listing> Filter(string priceMin, string priceMax, string neighbourhood, string ratingMin, string ratingMax)
+        public IQueryable<Listing> Filter(Filter filter)
         {
             throw new NotImplementedException();
         }

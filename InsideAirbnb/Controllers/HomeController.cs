@@ -38,7 +38,9 @@ namespace InsideAirbnb.Controllers
 
         public IActionResult Listings([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
         {
-            var summaryListingsQuery = _listingSummaryRepo.Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
+            Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
+
+            var summaryListingsQuery = _listingSummaryRepo.Filter(filter);
             List<ListingSummaryViewModel> listings = summaryListingsQuery.Take(1000).ToList();
 
             return Ok(listings);

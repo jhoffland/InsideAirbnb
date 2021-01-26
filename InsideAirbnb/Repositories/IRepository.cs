@@ -9,6 +9,6 @@ namespace InsideAirbnb.Repositories
     public interface IRepository<T>
     {
         public Task<T> Get(int id);
-        public IQueryable<T> Filter(string priceMin, string priceMax, string neighbourhood, string ratingMin, string ratingMax);
+        public IQueryable<T> Filter(Filter filter);
     }
 }

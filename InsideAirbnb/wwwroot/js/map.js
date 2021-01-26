@@ -58,7 +58,7 @@ const addMarkers = respData => {
 
         L.marker([listing.latitude, listing.longitude], {
             icon: L.divIcon({
-                className: listing.availability365 ? highAvailability(listing.availability365) ? 'marker-high' : 'marker-low' : 'marker-unkown',
+                className: listing.availability365 ? highAvailability(listing.availability365) ? 'marker-high' : 'marker-low' : 'marker-unknown',
                 // iconSize: [60, 60]
             })
         })
@@ -88,7 +88,9 @@ const getFormValues = () => {
 const updateListings = () => {
     const formValues = getFormValues();
 
-    $('.marker').remove();
+    $('.marker-high').remove();
+    $('.marker-low').remove();
+    $('.marker-unknown').remove();
     $('.leaflet-popup').remove();
 
     $.ajax({

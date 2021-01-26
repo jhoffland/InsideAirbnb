@@ -5,14 +5,14 @@
     width: 100%;
 }
 
-.marker-unkown, .marker-high, .marker-low {
+.marker-unknown, .marker-high, .marker-low {
     width: 8px;
     height: 8px;
     border-radius: 10px;
     cursor: pointer;
 }
 
-.marker-unkown {
+.marker-unknown {
     background-color: gray;
 }
 
