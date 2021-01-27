@@ -1,6 +1,8 @@
 using InsideAirbnb.Models;
 using InsideAirbnb.Repositories;
 using InsideAirbnb.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,8 +38,6 @@ namespace InsideAirbnb
                 // options.Storage = new SqlServerStorage(Configuration.GetConnectionString("MiniProfiler"));
             }).AddEntityFramework();
 
-            services.AddControllersWithViews();
-
             services.AddDbContext<AirBNBContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("AirBNB")
             ));
@@ -49,6 +49,14 @@ namespace InsideAirbnb
 
             services.AddScoped<IListingSummaryRepository, ListingSummaryRepository>();
             services.AddScoped<IListingRepository, ListingRepository>();
+
+            services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme).AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options));
+            services.AddAuthorization(options => {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("extension_Role", "Admin"));
+            });
+
+            services.AddControllersWithViews();
+            services.AddRazorPages(); // For Azure B2C
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +84,7 @@ namespace InsideAirbnb
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -83,6 +92,7 @@ namespace InsideAirbnb
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

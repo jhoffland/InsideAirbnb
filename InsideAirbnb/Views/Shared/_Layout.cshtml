@@ -3,12 +3,30 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]InsideAirbnb</title>
+    <title>@ViewData["Title"] | InsideAirbnb</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body class="h-100">
-     
+
+    @if (ViewData["HideNavbar"] == default || !(bool)ViewData["HideNavbar"])
+    {
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <p class="navbar-brand mb-0">InsideAirbnb</p>
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Amsterdam</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Admin">Admin</a>
+                </li>
+            </ul>
+
+            <partial name="_LoginPartial" />
+        </nav>
+    }
+
     <div class="container-fluid h-100">
         <main role="main" class="h-100">
             @RenderBody()
