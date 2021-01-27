@@ -32,6 +32,11 @@
             get => _RatingMax;
         }
 
+        public string CacheKey
+        {
+            get => $"{PriceMin}_{PriceMax}_{Neighbourhood}_{RatingMin}_{RatingMax}";
+        }
+
         public Filter(string priceMin, string priceMax, string neighbourhood, string ratingMin, string ratingMax)
         {
             int priceMinInt;

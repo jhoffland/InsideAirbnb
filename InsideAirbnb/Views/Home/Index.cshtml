@@ -41,10 +41,12 @@
                                 <label for="neighbourhood" class="mb-0">Neighbourhood</label>
                                 <select id="neighbourhood" name="neighbourhood" class="form-control">
                                     <option value="" selected></option>
-                                    @foreach (var neighbourhood in Model)
-                                    {
-                                        <option value="@neighbourhood.Neighbourhood">@neighbourhood.Neighbourhood</option>
-                                    }
+                                    <distributed-cache name="neighbourhood-cache" expires-after="@TimeSpan.FromDays(1)">
+                                        @foreach (var neighbourhood in Model)
+                                        {
+                                            <option value="@neighbourhood.Neighbourhood">@neighbourhood.Neighbourhood</option>
+                                        }
+                                    </distributed-cache>
                                 </select>
                             </div>
 

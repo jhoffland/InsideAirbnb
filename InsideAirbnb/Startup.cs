@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Profiling.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace InsideAirbnb
             services.AddMiniProfiler(options => {
                 options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomLeft;
                 options.PopupShowTimeWithChildren = true;
+                // options.Storage = new SqlServerStorage(Configuration.GetConnectionString("MiniProfiler"));
             }).AddEntityFramework();
 
             services.AddControllersWithViews();
@@ -39,6 +41,11 @@ namespace InsideAirbnb
             services.AddDbContext<AirBNBContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("AirBNB")
             ));
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+                options.InstanceName = "InsideAirbnb";
+            });
 
             services.AddScoped<IListingSummaryRepository, ListingSummaryRepository>();
             services.AddScoped<IListingRepository, ListingRepository>();
