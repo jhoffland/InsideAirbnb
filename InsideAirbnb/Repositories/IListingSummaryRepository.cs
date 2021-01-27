@@ -9,8 +9,8 @@ namespace InsideAirbnb.Repositories
 {
     public interface IListingSummaryRepository
     {
-        public IQueryable<ListingSummaryViewModel> Filter(Filter filter);
-        public List<RoomTypeStatsViewModel> RoomTypeStats(Filter filter);
-        public List<AvailabilityStatsViewModel> AvailabilityStats(Filter filter);
+        public Task<List<ListingSummaryViewModel>> Filter(Filter filter);
+        public Task<List<RoomTypeStatsViewModel>> RoomTypeStats(Filter filter);
+        public Task<List<AvailabilityStatsViewModel>> AvailabilityStats(Filter filter);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using InsideAirbnb.Models;
 using InsideAirbnb.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,27 +16,33 @@ namespace InsideAirbnb.Repositories
         {
             _context = context;
         }
-        public IQueryable<ListingSummaryViewModel> Filter(Filter filter)
+        public Task<List<ListingSummaryViewModel>> Filter(Filter filter)
         {
-            return FilteredQuery(filter).Select(summaryListing => new ListingSummaryViewModel
-            {
-                Id = summaryListing.Id,
-                HostName = summaryListing.HostName,
-                Name = summaryListing.Name,
-                Neighbourhood = summaryListing.Listing.Neighbourhood,
-                RoomType = summaryListing.RoomType,
-                Price = summaryListing.Price,
-                MinimumNights = summaryListing.MinimumNights,
-                Rating = summaryListing.Listing.ReviewScoresRating,
-                NumberOfReviews = summaryListing.NumberOfReviews,
-                LastReview = summaryListing.LastReview,
-                Availability365 = summaryListing.Availability365,
-                Latitude = ListingRepository.AmsterdamDBLatitude(summaryListing.Latitude),
-                Longitude = ListingRepository.AmsterdamDBLongitude(summaryListing.Longitude)
-            });
+            var query = FilteredQuery(filter)
+                .Select(summaryListing => new ListingSummaryViewModel
+                {
+                    Id = summaryListing.Id,
+                    HostName = summaryListing.HostName,
+                    Name = summaryListing.Name,
+                    Neighbourhood = summaryListing.Listing.Neighbourhood,
+                    RoomType = summaryListing.RoomType,
+                    Price = summaryListing.Price,
+                    MinimumNights = summaryListing.MinimumNights,
+                    Rating = summaryListing.Listing.ReviewScoresRating,
+                    NumberOfReviews = summaryListing.NumberOfReviews,
+                    LastReview = summaryListing.LastReview,
+                    Availability365 = summaryListing.Availability365,
+                    Latitude = ListingRepository.AmsterdamDBLatitude(summaryListing.Latitude),
+                    Longitude = ListingRepository.AmsterdamDBLongitude(summaryListing.Longitude)
+                });
+
+            return query
+                .Take(1000)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public List<RoomTypeStatsViewModel> RoomTypeStats(Filter filter)
+        public Task<List<RoomTypeStatsViewModel>> RoomTypeStats(Filter filter)
         {
             var query = FilteredQuery(filter);
 
@@ -44,10 +51,12 @@ namespace InsideAirbnb.Repositories
                 {
                     RoomType = groupedListing.Key,
                     Amount = groupedListing.Count()
-                }).ToList();
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public List<AvailabilityStatsViewModel> AvailabilityStats(Filter filter)
+        public Task<List<AvailabilityStatsViewModel>> AvailabilityStats(Filter filter)
         {
             var query = FilteredQuery(filter);
 
@@ -59,7 +68,9 @@ namespace InsideAirbnb.Repositories
                     Availability365 = groupedListing.Key,
                     Amount = groupedListing.Count()
 
-                }).ToList();
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         private IQueryable<SummaryListing> FilteredQuery(Filter filter)

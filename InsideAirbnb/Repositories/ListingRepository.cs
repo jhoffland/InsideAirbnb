@@ -18,7 +18,7 @@ namespace InsideAirbnb.Repositories
             _context = context;
         }
 
-        public List<NeighbourhoodReviewStatsViewModel> NeighbourhoodReviewStats()
+        public Task<List<NeighbourhoodReviewStatsViewModel>> NeighbourhoodReviewStats()
         {
             var query = Query();
 
@@ -32,10 +32,11 @@ namespace InsideAirbnb.Repositories
                 })
                 .OrderBy(stat => stat.AverageLocationReviewScore)
                 .Take(5)
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public List<PropertyGuestsStatsViewModel> PropertyGuestsStats()
+        public Task<List<PropertyGuestsStatsViewModel>> PropertyGuestsStats()
         {
             var query = Query();
 
@@ -49,7 +50,8 @@ namespace InsideAirbnb.Repositories
                 })
                 .OrderByDescending(stat => stat.AverageGuestsIncluded)
                 .Take(3)
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         private IQueryable<Listing> Query()
@@ -65,7 +67,7 @@ namespace InsideAirbnb.Repositories
             string latitudeString = dbLatitude.ToString();
 
             double first = double.Parse($"{latitudeString[0]}{latitudeString[1]}");
-            double decimals = double.Parse($"0.{latitudeString.Substring(2, 6)}", CultureInfo.InvariantCulture);
+            double decimals = double.Parse($"0.{latitudeString.Substring(2)}", CultureInfo.InvariantCulture);
 
             return first + decimals;
         }
@@ -77,7 +79,7 @@ namespace InsideAirbnb.Repositories
             string longitudeString = dbLongitude.ToString();
 
             double first = double.Parse($"{longitudeString[0]}");
-            double decimals = double.Parse($"0.{longitudeString.Substring(1, 6)}", CultureInfo.InvariantCulture);
+            double decimals = double.Parse($"0.{longitudeString.Substring(1)}", CultureInfo.InvariantCulture);
 
             return first + decimals;
         }

@@ -17,12 +17,12 @@ namespace InsideAirbnb.Controllers
             _listingRepo = listingRepo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var adminChartsData = new AdminChartsDataViewModel
             {
-                NeighbourhoodReviewStats = _listingRepo.NeighbourhoodReviewStats(),
-                PropertyGuestsStats = _listingRepo.PropertyGuestsStats()
+                NeighbourhoodReviewStats = await _listingRepo.NeighbourhoodReviewStats(),
+                PropertyGuestsStats = await _listingRepo.PropertyGuestsStats()
             };
 
             return View(adminChartsData);

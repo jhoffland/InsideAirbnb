@@ -35,28 +35,25 @@ namespace InsideAirbnb.Controllers
             return View(neighbourhoods);
         }
 
-        public IActionResult Listings([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
+        public async Task<IActionResult> Listings([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
         {
             Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
 
-            var summaryListingsQuery = _listingSummaryRepo.Filter(filter);
-            List<ListingSummaryViewModel> listings = summaryListingsQuery.Take(1000).ToList();
-
-            return Ok(listings);
+            return Ok(await _listingSummaryRepo.Filter(filter));
         }
 
-        public IActionResult RoomTypeStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
+        public async Task<IActionResult> RoomTypeStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
         {
             Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
 
-            return Ok(_listingSummaryRepo.RoomTypeStats(filter));
+            return Ok(await _listingSummaryRepo.RoomTypeStats(filter));
         }
 
-        public IActionResult AvailabilityStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
+        public async Task<IActionResult> AvailabilityStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
         {
             Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
 
-            return Ok(_listingSummaryRepo.AvailabilityStats(filter));
+            return Ok(await _listingSummaryRepo.AvailabilityStats(filter));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

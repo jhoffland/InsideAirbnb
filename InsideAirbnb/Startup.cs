@@ -27,6 +27,13 @@ namespace InsideAirbnb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
+
+            services.AddMiniProfiler(options => {
+                options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomLeft;
+                options.PopupShowTimeWithChildren = true;
+            }).AddEntityFramework();
+
             services.AddControllersWithViews();
 
             services.AddDbContext<AirBNBContext>(options => 
@@ -40,6 +47,8 @@ namespace InsideAirbnb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -52,6 +61,11 @@ namespace InsideAirbnb
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            if(env.IsDevelopment())
+            {
+                app.UseMiniProfiler();
+            }
 
             app.UseRouting();
 

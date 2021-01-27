@@ -9,7 +9,7 @@ namespace InsideAirbnb.Repositories
 {
     public interface IListingRepository
     {
-        public List<NeighbourhoodReviewStatsViewModel> NeighbourhoodReviewStats();
-        public List<PropertyGuestsStatsViewModel> PropertyGuestsStats();
+        public Task<List<NeighbourhoodReviewStatsViewModel>> NeighbourhoodReviewStats();
+        public Task<List<PropertyGuestsStatsViewModel>> PropertyGuestsStats();
     }
 }
