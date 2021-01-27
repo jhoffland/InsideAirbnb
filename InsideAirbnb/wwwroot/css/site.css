@@ -62,3 +62,28 @@
 .leaflet-popup-content div.numbers p.rating, .leaflet-popup-content div.numbers p.high-low-availability {
     margin-top: 10px;
 }
+
+.map-sidebar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 100vh;
+}
+
+.admin-link-map {
+    z-index: 9999;
+    transform: rotate(-90deg);
+    position: absolute;
+    right: -13.5px;
+    top: 45px;
+    padding: 7px 5px 5px 5px;
+    border-top-left-radius: 7px;
+    font-size: 15px;
+    line-height: 15px;
+    border-top-right-radius: 7px;
+    background-color: white;
+}
+
+.admin-link-map:hover {
+    text-decoration: none;
+    background-color: #fbfbfb;
+}

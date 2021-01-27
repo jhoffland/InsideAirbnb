@@ -33,7 +33,8 @@ namespace InsideAirbnb
                 options.UseSqlServer(Configuration.GetConnectionString("AirBNB")
             ));
 
-            services.AddScoped<IRepository<ListingSummaryViewModel>, ListingSummaryRepository>();
+            services.AddScoped<IListingSummaryRepository, ListingSummaryRepository>();
+            services.AddScoped<IListingRepository, ListingRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

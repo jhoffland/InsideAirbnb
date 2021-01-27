@@ -3,3 +3,21 @@
 
 // Write your JavaScript code.
 const highAvailability = availability365 => availability365 > 70;
+
+const getFilterFormValues = () => {
+    const priceMin = document.getElementById('price-min').value;
+    const priceMax = document.getElementById('price-max').value;
+
+    const neighbourhood = document.getElementById('neighbourhood').value;
+
+    const ratingMin = document.getElementById('rating-min').value;
+    const ratingMax = document.getElementById('rating-max').value;
+
+    return {
+        priceMin,
+        priceMax,
+        neighbourhood,
+        ratingMin,
+        ratingMax
+    }
+}

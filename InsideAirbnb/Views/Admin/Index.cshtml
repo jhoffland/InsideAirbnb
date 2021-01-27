@@ -1,0 +1,82 @@
+﻿@model InsideAirbnb.ViewModels.AdminChartsDataViewModel
+
+@{
+    ViewData["Title"] = "Admin | ";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <p class="navbar-brand mb-0">InsideAirbnb</p>
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Amsterdam</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Admin">Admin <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div id="neighbourhood-review-chart"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="property-guests-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+        const drawNeighbourhoodReviewChart = data => {
+            const chartData = new google.visualization.DataTable();
+            chartData.addColumn('string', 'Neighbourhood');
+            chartData.addColumn('number', 'Average location review score');
+
+            chartData.addRows(data.reduce((prev, curr) => {
+                prev.push([curr.neighbourhood, curr.averageLocationReviewScore])
+                return prev;
+            }, []));
+
+            const neighbourhoodReviewChart = new google.visualization.ColumnChart(document.getElementById('neighbourhood-review-chart'));
+            neighbourhoodReviewChart.draw(chartData, {
+                'title': 'Average location review, worst 5 neighbourhoods',
+                // 'width': 400,
+                'height': 500,
+                'legend': { 'position': 'none' }
+            });
+        }
+
+        const drawPropertyGuestsChart = data => {
+            const chartData = new google.visualization.DataTable();
+            chartData.addColumn('string', 'Property type');
+            chartData.addColumn('number', 'Average guests included');
+
+            chartData.addRows(data.reduce((prev, curr) => {
+                prev.push([curr.propertyType, curr.averageGuestsIncluded])
+                return prev;
+            }, []));
+
+            const neighbourhoodReviewChart = new google.visualization.BarChart(document.getElementById('property-guests-chart'));
+            neighbourhoodReviewChart.draw(chartData, {
+                'title': 'Average guests included, top 3 property types',
+                // 'width': 400,
+                'height': 500,
+                'legend': { 'position': 'none' }
+            });
+        }
+
+        google.charts.setOnLoadCallback(() => {
+            drawNeighbourhoodReviewChart(@Html.Raw(Json.Serialize(Model.NeighbourhoodReviewStats)));
+            drawPropertyGuestsChart(@Html.Raw(Json.Serialize(Model.PropertyGuestsStats)));
+        });
+    </script>
+}

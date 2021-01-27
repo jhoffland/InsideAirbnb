@@ -15,10 +15,9 @@ namespace InsideAirbnb.Controllers
     public class HomeController : Controller
     {
         private readonly AirBNBContext _context;
-        private readonly IRepository<ListingSummaryViewModel> _listingSummaryRepo;
+        private readonly IListingSummaryRepository _listingSummaryRepo;
 
-
-        public HomeController(AirBNBContext context, IRepository<ListingSummaryViewModel> listingSummaryRepo)
+        public HomeController(AirBNBContext context, IListingSummaryRepository listingSummaryRepo)
         {
             _context = context;
             _listingSummaryRepo = listingSummaryRepo;
@@ -46,6 +45,19 @@ namespace InsideAirbnb.Controllers
             return Ok(listings);
         }
 
+        public IActionResult RoomTypeStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
+        {
+            Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
+
+            return Ok(_listingSummaryRepo.RoomTypeStats(filter));
+        }
+
+        public IActionResult AvailabilityStats([FromQuery(Name = "price-min")] string priceMin, [FromQuery(Name = "price-max")] string priceMax, [FromQuery(Name = "neighbourhood")] string neighbourhood, [FromQuery(Name = "rating-min")] string ratingMin, [FromQuery(Name = "rating-max")] string ratingMax)
+        {
+            Filter filter = new Filter(priceMin, priceMax, neighbourhood, ratingMin, ratingMax);
+
+            return Ok(_listingSummaryRepo.AvailabilityStats(filter));
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,4 +1,6 @@
 ﻿using InsideAirbnb.Models;
+using InsideAirbnb.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,16 +9,53 @@ using System.Threading.Tasks;
 
 namespace InsideAirbnb.Repositories
 {
-    public class ListingRepository : IRepository<Listing>
+    public class ListingRepository : IListingRepository
     {
-        public IQueryable<Listing> Filter(Filter filter)
+
+        private readonly AirBNBContext _context;
+        public ListingRepository(AirBNBContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<Listing> Get(int id)
+        public List<NeighbourhoodReviewStatsViewModel> NeighbourhoodReviewStats()
         {
-            throw new NotImplementedException();
+            var query = Query();
+
+            query = query.Where(listing => listing.NeighbourhoodCleansed != null && listing.ReviewScoresLocation != null);
+
+            return query.GroupBy(listing => listing.NeighbourhoodCleansed)
+                .Select(groupedListing => new NeighbourhoodReviewStatsViewModel
+                {
+                    Neighbourhood = groupedListing.Key,
+                    AverageLocationReviewScore = Math.Round(((double) groupedListing.Average(listing => listing.ReviewScoresLocation)), 2)
+                })
+                .OrderBy(stat => stat.AverageLocationReviewScore)
+                .Take(5)
+                .ToList();
+        }
+
+        public List<PropertyGuestsStatsViewModel> PropertyGuestsStats()
+        {
+            var query = Query();
+
+            query = query.Where(listing => listing.PropertyType != null && listing.GuestsIncluded != null);
+
+            return query.GroupBy(listing => listing.PropertyType)
+                .Select(groupedListing => new PropertyGuestsStatsViewModel
+                {
+                    PropertyType = groupedListing.Key,
+                    AverageGuestsIncluded = Math.Round(((double) groupedListing.Average(listing => listing.GuestsIncluded)))
+                })
+                .OrderByDescending(stat => stat.AverageGuestsIncluded)
+                .Take(3)
+                .ToList();
+        }
+
+        private IQueryable<Listing> Query()
+        {
+            return _context.Listings
+                .Where(listing => listing.Latitude != null && listing.Longitude != null && listing.City == "Amsterdam");
         }
 
         public static double? AmsterdamDBLatitude(double? dbLatitude)

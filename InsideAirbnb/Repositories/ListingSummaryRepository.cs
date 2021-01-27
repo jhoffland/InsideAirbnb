@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace InsideAirbnb.Repositories
 {
-    public class ListingSummaryRepository : IRepository<ListingSummaryViewModel>
+    public class ListingSummaryRepository : IListingSummaryRepository
     {
         private readonly AirBNBContext _context;
         public ListingSummaryRepository(AirBNBContext context)
@@ -17,19 +17,7 @@ namespace InsideAirbnb.Repositories
         }
         public IQueryable<ListingSummaryViewModel> Filter(Filter filter)
         {
-            var query = Query();
-
-            if (filter.PriceMin != null) query = query.Where(summaryListing => summaryListing.Price >= filter.PriceMin);
-
-            if (filter.PriceMax != null) query = query.Where(summaryListing => summaryListing.Price <= filter.PriceMax);
-
-            if (filter.Neighbourhood != null) query = query.Where(summaryListing => summaryListing.Neighbourhood == filter.Neighbourhood);
-
-            if (filter.RatingMin != null) query = query.Where(summaryListing => summaryListing.Listing.ReviewScoresRating >= (filter.RatingMin * 10));
-
-            if (filter.RatingMax != null) query = query.Where(summaryListing => summaryListing.Listing.ReviewScoresRating <= (filter.RatingMax * 10));
-
-            return query.Select(summaryListing => new ListingSummaryViewModel
+            return FilteredQuery(filter).Select(summaryListing => new ListingSummaryViewModel
             {
                 Id = summaryListing.Id,
                 HostName = summaryListing.HostName,
@@ -47,9 +35,48 @@ namespace InsideAirbnb.Repositories
             });
         }
 
-        public Task<ListingSummaryViewModel> Get(int id)
+        public List<RoomTypeStatsViewModel> RoomTypeStats(Filter filter)
         {
-            throw new NotImplementedException();
+            var query = FilteredQuery(filter);
+
+            return query.GroupBy(summaryListing => summaryListing.RoomType)
+                .Select(groupedListing => new RoomTypeStatsViewModel
+                {
+                    RoomType = groupedListing.Key,
+                    Amount = groupedListing.Count()
+                }).ToList();
+        }
+
+        public List<AvailabilityStatsViewModel> AvailabilityStats(Filter filter)
+        {
+            var query = FilteredQuery(filter);
+
+            query = query.Where(summaryListing => summaryListing.Availability365 != null);
+
+            return query.GroupBy(summaryListing => summaryListing.Availability365)
+                .Select(groupedListing => new AvailabilityStatsViewModel
+                {
+                    Availability365 = groupedListing.Key,
+                    Amount = groupedListing.Count()
+
+                }).ToList();
+        }
+
+        private IQueryable<SummaryListing> FilteredQuery(Filter filter)
+        {
+            var query = Query();
+
+            if (filter.PriceMin != null) query = query.Where(summaryListing => summaryListing.Price >= filter.PriceMin);
+
+            if (filter.PriceMax != null) query = query.Where(summaryListing => summaryListing.Price <= filter.PriceMax);
+
+            if (filter.Neighbourhood != null) query = query.Where(summaryListing => summaryListing.Neighbourhood == filter.Neighbourhood);
+
+            if (filter.RatingMin != null) query = query.Where(summaryListing => summaryListing.Listing.ReviewScoresRating >= (filter.RatingMin * 10));
+
+            if (filter.RatingMax != null) query = query.Where(summaryListing => summaryListing.Listing.ReviewScoresRating <= (filter.RatingMax * 10));
+
+            return query;
         }
 
         private IQueryable<SummaryListing> Query()

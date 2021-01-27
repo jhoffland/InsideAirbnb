@@ -28,7 +28,7 @@ const addMarkers = respData => {
 
         popup += '<div class="numbers">';
 
-        if (listing.price) {
+        if (listing.price !== null) {
             popup += `<p class="price">&euro; ${listing.price}.00 /night</p>`;
 
             if (listing.minimumNights) {
@@ -36,7 +36,7 @@ const addMarkers = respData => {
             }
         }
 
-        if (listing.rating) {
+        if (listing.rating !== null) {
             popup += `<p class="rating">Rating ${listing.rating / 10} / 10</p>`;
 
             if (listing.numberOfReviews) {
@@ -48,7 +48,7 @@ const addMarkers = respData => {
             }
         }
 
-        if (listing.availability365) {
+        if (listing.availability365 !== null) {
             const availabilityPerc = listing.availability365 / 365;
             popup += `<p class="high-low-availability">${highAvailability(listing.availability365) ? 'HIGH' : 'LOW'} availability</p>`;
             popup += `<p class="availability-numbers">${listing.availability365} days/year (${Math.round(availabilityPerc * 100)}%)</p>`;
@@ -58,7 +58,7 @@ const addMarkers = respData => {
 
         L.marker([listing.latitude, listing.longitude], {
             icon: L.divIcon({
-                className: listing.availability365 ? highAvailability(listing.availability365) ? 'marker-high' : 'marker-low' : 'marker-unknown',
+                className: listing.availability365 !== null ? highAvailability(listing.availability365) ? 'marker-high' : 'marker-low' : 'marker-unknown',
                 // iconSize: [60, 60]
             })
         })
@@ -67,26 +67,8 @@ const addMarkers = respData => {
     });
 }
 
-const getFormValues = () => {
-    const priceMin = document.getElementById('price-min').value;
-    const priceMax = document.getElementById('price-max').value;
-
-    const neighbourhood = document.getElementById('neighbourhood').value;
-
-    const ratingMin = document.getElementById('rating-min').value;
-    const ratingMax = document.getElementById('rating-max').value;
-
-    return {
-        priceMin,
-        priceMax,
-        neighbourhood,
-        ratingMin,
-        ratingMax
-    }
-}
-
 const updateListings = () => {
-    const formValues = getFormValues();
+    const formValues = getFilterFormValues();
 
     $('.marker-high').remove();
     $('.marker-low').remove();
@@ -99,7 +81,7 @@ const updateListings = () => {
         dataType: "json"
     })
         .done(data => addMarkers(data))
-        .fail(error => alert("Er is iets misgegaan met het ophalen van de locaties."));
+        .fail(error => alert("Something went wrong with retreiving the listings."));
 }
 
 document.getElementById('filter-form').addEventListener('submit', event => {
