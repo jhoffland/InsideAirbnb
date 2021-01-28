@@ -31,6 +31,7 @@ namespace InsideAirbnb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCompression();
+            services.AddResponseCaching();
 
             services.AddMiniProfiler(options => {
                 options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomLeft;

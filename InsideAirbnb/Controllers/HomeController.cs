@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace InsideAirbnb.Controllers
 {
@@ -40,14 +41,15 @@ namespace InsideAirbnb.Controllers
             };
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<NeighbourhoodViewModel> neighbourhoods = _context.Neighbourhoods.Select(n => new NeighbourhoodViewModel
+            List<NeighbourhoodViewModel> neighbourhoods = await _context.Neighbourhoods.Select(n => new NeighbourhoodViewModel
             {
                 Neighbourhood = n.Neighbourhood1
             })
                 .OrderBy(neighbourhoods => neighbourhoods.Neighbourhood)
-                .ToList();
+                .AsNoTracking()
+                .ToListAsync();
 
             return View(neighbourhoods);
         }
