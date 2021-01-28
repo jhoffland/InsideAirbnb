@@ -62,8 +62,8 @@
         }
 
         google.charts.setOnLoadCallback(() => {
-            drawNeighbourhoodReviewChart(@Html.Raw(Json.Serialize(Model.NeighbourhoodReviewStats)));
-            drawPropertyGuestsChart(@Html.Raw(Json.Serialize(Model.PropertyGuestsStats)));
+            drawNeighbourhoodReviewChart(@Html.Raw(Model.NeighbourhoodReviewStats));
+            drawPropertyGuestsChart(@Html.Raw(Model.PropertyGuestsStats));
         });
     </script>
 }
