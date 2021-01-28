@@ -64,6 +64,7 @@ namespace InsideAirbnb
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
+            app.UseResponseCaching();
 
             if (env.IsDevelopment())
             {
